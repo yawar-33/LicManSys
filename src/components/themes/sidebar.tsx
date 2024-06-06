@@ -8,9 +8,12 @@ import { getItem } from "../utils";
 const Sidebar = () => {
   const [isadmin, setIsadmin] = useState("no")
   useEffect(() => {
-    console.log(getItem("userdata").isadmin.toLowerCase());
-    if (getItem("userdata").isadmin.toLowerCase()) {
-      setIsadmin(getItem("userdata").isadmin.toLowerCase())
+    if (getItem("userdata").isadmin) {
+      if (getItem("userdata").isadmin.toLowerCase()) {
+        setIsadmin(getItem("userdata").isadmin.toLowerCase())
+      } else {
+        setIsadmin('no')
+      }
     } else {
       setIsadmin('no')
     }
@@ -22,7 +25,7 @@ const Sidebar = () => {
       }}
     >
       <div className="brand-link text-center">
-        <span className="brand-text font-weight-light text-center">ADMIN</span>
+        <span className="brand-text font-weight-light text-center">{isadmin === "yes" ? "Admin" : "Client"}</span>
       </div>
       <div className="sidebar">
         <nav className="mt-2">

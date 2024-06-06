@@ -44,12 +44,21 @@ const Login = (props: any) => {
   
   const onSubmit = async (data: any) => {
     props.router.push("/dashboard");
-    setItem("userdata", {
-      userid: data.username,
-      username: data.username,
-      token: 12341212,
-      isadmin: data.isadmin
-    });
+    if (data.username === 'admin') {   
+      setItem("userdata", {
+        userid: data.username,
+        username: data.username,
+        token: 12341212,
+        isadmin: 'yes'
+      });
+    }else{
+      setItem("userdata", {
+        userid: data.username,
+        username: data.username,
+        token: 12341212,
+        isadmin: 'no'
+      });
+    }
   };
 
   return (
@@ -66,27 +75,21 @@ const Login = (props: any) => {
               iconFormGroup="fas fa-envelope"
               formGroup
               errors={errors?.username}
-              placeholder="Yawar Userid"
+              placeholder="Userid"
             />
             <InputField
               label="Password"
               name="password"
               type="text"
               register={register("password")}
-              placeholder="Yawar Password"
+              placeholder="Password"
               iconFormGroup={password ? "fas fa-eye-slash" : "fas fa-eye"}
               customeCss={password ? "password-hide-css" : ""}
               btnAction={() => setPassword(!password)}
               formGroup
               errors={errors?.password}
             />
-            <InputField
-              label="Is Admin"
-              name="isadmin"
-              type="text"
-              placeholder="Yes or No"
-              register={register("isadmin")}
-            />
+           
             <Row>
               <Col size="12">
                 <Button
