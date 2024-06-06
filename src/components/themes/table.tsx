@@ -34,7 +34,8 @@ const Table = () => {
                             <thead>
                                 <tr className="headings">
                                     <th className="column-title">Id </th>
-                                    <th className="column-title">Invoice Date </th>
+                                    <th className="column-title">Licenses Start Date </th>
+                                    <th className="column-title">Licenses End Date </th>
                                     <th className="column-title">Licenses # </th>
                                     <th className="column-title">Bill to Name </th>
                                     <th className="column-title">Status </th>
@@ -47,7 +48,8 @@ const Table = () => {
 
                                     <td className=" ">121000040</td>
                                     <td className=" ">May 23, 2014 11:47:56 PM </td>
-                                    <td className=" ">121000210 <i className="success fa fa-long-arrow-up"></i></td>
+                                    <td className=" ">July 23, 2016 10:47:56 PM </td>
+                                    <td className=" ">121000210 <i className="success fa fa-long-arrow-up" style={{ color: "#ffc107 " }}></i></td>
                                     <td className=" ">John Blank L</td>
                                     <td className=" ">Paid</td>
                                     <td className="a-right a-right ">$7.45</td>
@@ -55,8 +57,9 @@ const Table = () => {
                                 </tr>
                                 <tr className="odd pointer">
                                     <td className=" ">121000039</td>
-                                    <td className=" ">May 23, 2014 11:30:12 PM</td>
-                                    <td className=" ">121000208 <i className="success fa fa-long-arrow-up"></i>
+                                    <td className=" ">July 24, 2016 10:47:56 AM</td>
+                                    <td className=" ">May 23, 2019 11:30:12 PM</td>
+                                    <td className=" ">121000208 <i className="success fa fa-long-arrow-up" style={{ color: "#ffc107 " }}></i>
                                     </td>
                                     <td className=" ">John Blank L</td>
                                     <td className=" ">Paid</td>
@@ -65,8 +68,9 @@ const Table = () => {
                                 <tr className="even pointer">
 
                                     <td className=" ">121000038</td>
-                                    <td className=" ">May 24, 2014 10:55:33 PM</td>
-                                    <td className=" ">121000203 <i className="success fa fa-long-arrow-up"></i>
+                                    <td className=" ">May 25, 2019 10:55:33 PM</td>
+                                    <td className=" ">July 24, 2021 10:55:33 PM</td>
+                                    <td className=" ">121000203 <i className="success fa fa-long-arrow-down" style={{ color: "#dc3545" }}></i>
                                     </td>
                                     <td className=" ">Mike Smith</td>
                                     <td className=" ">Paid</td>
@@ -74,8 +78,9 @@ const Table = () => {
                                 </tr>
                                 <tr className="odd pointer">
                                     <td className=" ">121000037</td>
-                                    <td className=" ">May 24, 2014 10:52:44 PM</td>
-                                    <td className=" ">121000204</td>
+                                    <td className=" ">July 24, 2014 10:52:44 PM</td>
+                                    <td className=" ">Aug 24, 2014 10:52:44 PM</td>
+                                    <td className=" ">121000204 <i className="success fa fa-long-arrow-down" style={{ color: "#dc3545" }}></i></td>
                                     <td className=" ">Mike Smith</td>
                                     <td className=" ">Paid</td>
                                     <td className="a-right a-right ">$333.21</td>
