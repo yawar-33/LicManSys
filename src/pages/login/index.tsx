@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import { withRouter } from "next/router";
+import apiCall from "@/components/utils/apiservice";
 
 const defaultValue = {
   username: "",
@@ -41,17 +42,21 @@ const Login = (props: any) => {
     defaultValues: defaultValue
   });
   const [password, setPassword] = useState(true);
-  
+
   const onSubmit = async (data: any) => {
+    // sample api call 
+    // const result = await apiCall('POST', 'api/admin/signin');
+    // console.log('result', result)
+    
     props.router.push("/dashboard");
-    if (data.username === 'admin') {   
+    if (data.username === 'admin') {
       setItem("userdata", {
         userid: data.username,
         username: data.username,
         token: 12341212,
         isadmin: 'yes'
       });
-    }else{
+    } else {
       setItem("userdata", {
         userid: data.username,
         username: data.username,
@@ -89,7 +94,7 @@ const Login = (props: any) => {
               formGroup
               errors={errors?.password}
             />
-           
+
             <Row>
               <Col size="12">
                 <Button
