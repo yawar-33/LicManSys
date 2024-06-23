@@ -4,30 +4,34 @@ import {
   useRecoilValue,
   useSetRecoilState
 } from "recoil";
-
-const Footer = lazy(() => import("./footer"));
-const Header = lazy(() => import("./header"));
-const Sidebar = lazy(() => import("./sidebar"));
-
+import { Suspense, lazy, useEffect, useState, useCallback, startTransition } from "react";
+import { useRouter } from "next/router";
 import { themesSetting } from "@/recoil";
 import { screenSize, toggleSidebarMenu } from "../utils";
 import {
   LoadingApp,
   addWindowClass,
   calculateWindowSize,
-  getItem,
   removeWindowClass,
   useWindowSize
 } from "../utils/function";
-import { Suspense, lazy, useEffect, useState } from "react";
-import { withRouter } from "next/router";
+import { isUserValidated } from "../utils/authHelper";
 
-const Layout = ({ children, router }: any) => {
+const Footer = lazy(() => import("./footer"));
+const Header = lazy(() => import("./header"));
+const Sidebar = lazy(() => import("./sidebar"));
+
+const Layout = ({ children }: any) => {
   const theme = useRecoilValue(themesSetting);
   const screen = useRecoilValue(screenSize);
   const sidebar = useRecoilValue(toggleSidebarMenu);
   const setSizeValue = useSetRecoilState(screenSize);
   const [valueHideSidebar, setHideSidebar] = useRecoilState(toggleSidebarMenu);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  const windowSize = useWindowSize();
+  const setTheme = useSetRecoilState(themesSetting);
 
   const handleToggleMenuSidebar = () => {
     setHideSidebar({
@@ -35,38 +39,48 @@ const Layout = ({ children, router }: any) => {
     });
   };
 
-  const windowSize = useWindowSize();
-  const setTheme = useSetRecoilState(themesSetting);
-  const [loading, setloading] = useState(true);
+  const checkUserValidation = useCallback(() => {
+    console.log(isUserValidated())
+    if (!isUserValidated()) {
+      router.replace("/login");
+    }
+  }, [router]);
 
   useEffect(() => {
-    if (getItem("userdata").token === undefined) {
-      router.push("/login");
-    }
+    checkUserValidation(); // Check user validation on component mount
+  }, [checkUserValidation]);
+
+  useEffect(() => {
     removeWindowClass("sidebar-closed");
     removeWindowClass("sidebar-collapse");
     removeWindowClass("sidebar-open");
 
-    const size = calculateWindowSize(windowSize.width);
-    if (screen.screenSize !== size) {
-      setSizeValue({ screenSize: size });
-    }
+    startTransition(() => {
+      const size = calculateWindowSize(windowSize.width);
+      if (screen.screenSize !== size) {
+        setSizeValue({ screenSize: size });
+      }
 
-    if (sidebar.menuSidebarCollapsed && screen.screenSize === "lg") {
-      addWindowClass("sidebar-collapse");
-    } else if (sidebar.menuSidebarCollapsed && screen.screenSize === "xs") {
-      addWindowClass("sidebar-open");
-    } else if (!sidebar.menuSidebarCollapsed && screen.screenSize !== "lg") {
-      addWindowClass("sidebar-closed");
-      addWindowClass("sidebar-collapse");
-    }
+      if (sidebar.menuSidebarCollapsed && screen.screenSize === "lg") {
+        addWindowClass("sidebar-collapse");
+      } else if (sidebar.menuSidebarCollapsed && screen.screenSize === "xs") {
+        addWindowClass("sidebar-open");
+      } else if (!sidebar.menuSidebarCollapsed && screen.screenSize !== "lg") {
+        addWindowClass("sidebar-closed");
+        addWindowClass("sidebar-collapse");
+      }
 
-    setTimeout(() => {
-      setloading(false);
-    }, 1000);
-  }, [windowSize, sidebar, setTheme, screen.screenSize, setSizeValue, router]);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    });
+  }, [windowSize, sidebar.menuSidebarCollapsed, screen.screenSize, setSizeValue]);
 
   RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
+
+  if (loading) {
+    return <LoadingApp />;
+  }
 
   return (
     <Suspense fallback={<LoadingApp />}>
@@ -83,9 +97,8 @@ const Layout = ({ children, router }: any) => {
           onKeyDown={() => {}}
         />
       </div>
-      {loading && <LoadingApp />}
     </Suspense>
   );
 };
 
-export default withRouter(Layout);
+export default Layout;

@@ -13,7 +13,8 @@ const apiCall = async (method: any, url: any, data = null, config = {}) => {
     } catch (error) {
         // Handle error (log it, display a message, etc.)
         console.error('API call error:', error);
-        throw error;
+        // throw error;
+        return error
     }
 };
 

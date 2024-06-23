@@ -8,9 +8,9 @@ import { getItem } from "../utils";
 const Sidebar = () => {
   const [isadmin, setIsadmin] = useState("no")
   useEffect(() => {
-    if (getItem("userdata").isadmin) {
-      if (getItem("userdata").isadmin.toLowerCase()) {
-        setIsadmin(getItem("userdata").isadmin.toLowerCase())
+    if (getItem("userData").isadmin) {
+      if (getItem("userData").isadmin.toLowerCase()) {
+        setIsadmin(getItem("userData").isadmin.toLowerCase())
       } else {
         setIsadmin('no')
       }

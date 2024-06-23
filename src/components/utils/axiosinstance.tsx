@@ -1,11 +1,16 @@
 // utils/axiosInstance.js
 import axios from 'axios';
+import { getItem } from './function';
 
 const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/", // Use an environment variable for the base URL
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://localhost:7222/',
     timeout: 10000, // Set a default timeout for requests
     headers: {
+        Accept: '*/*',
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
+        'Access-Control-Max-Age': '6000',
+        'Access-Control-Allow-Headers': '*',
     },
 });
 
@@ -13,6 +18,10 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     config => {
         // Do something before the request is sent, e.g., add authentication tokens
+        const token = getItem("tokenData").token; // Get the token from localStorage
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
         return config;
     },
     error => {
