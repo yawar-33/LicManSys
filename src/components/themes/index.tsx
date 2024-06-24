@@ -39,16 +39,13 @@ const Layout = ({ children }: any) => {
     });
   };
 
-  const checkUserValidation = useCallback(() => {
-    console.log(isUserValidated())
+  useEffect(() => {
     if (!isUserValidated()) {
       router.replace("/login");
+    } else {
+      setLoading(false);
     }
   }, [router]);
-
-  useEffect(() => {
-    checkUserValidation(); // Check user validation on component mount
-  }, [checkUserValidation]);
 
   useEffect(() => {
     removeWindowClass("sidebar-closed");
