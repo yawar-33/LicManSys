@@ -83,11 +83,17 @@ const AddNewCustomer = (props: any) => {
     }, [])
 
     const GetAllLicenseType = async () => {
+        setLicenseTypes([{
+            licenseName: 'Choose option',
+            allowedLicense: 0,
+            id: 0,
+            isValidated: false,
+            roleId: 0,
+        }]);
         apiCall('GET', 'admin/getlicensetypes').then((result) => {
-            setLicenseTypes(prevDetails => [
-                ...prevDetails,
-                result
-            ]);
+            let data = [...licenseTypes]
+            data = data.concat(result)
+            setLicenseTypes(data);
         }).catch((err) => console.log(err))
 
     }
@@ -352,7 +358,7 @@ const AddNewCustomer = (props: any) => {
                                         {licenseTypes.map((item) => {
                                             return (
                                                 <option key={item.id} value={item.id}>
-                                                    {item.licenseName}
+                                                    {item.licenseName}{item.id !== 0 && ` (${item.allowedLicense})`}
                                                 </option>
                                             )
                                         })}
