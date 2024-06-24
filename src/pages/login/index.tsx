@@ -6,6 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { withRouter } from "next/router";
 import { getBasicAuthToken } from "@/components/utils/authHelper";
 import apiCall from "@/components/utils/apiservice";
+import Alert from "@/components/themes/Alerts";
 
 const defaultValue = {
   username: "",
@@ -15,6 +16,8 @@ const defaultValue = {
 
 const Login = (props: any) => {
   const setTheme = useSetRecoilState(themesSetting);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   useEffect(() => {
     if (getItem("userdata").isValidated !== undefined) {
       if (getItem("userdata").isValidated) {
@@ -53,18 +56,21 @@ const Login = (props: any) => {
     console.log('token generate ', token)
 
     if (token) {
-      const result: any = await apiCall('POST', 'admin/login');
-      console.log('result', result)
-      if (result.isValidated) {
-        props.router.push("/dashboard");
-        setItem("userdata", {
-          username: data.username,
-          isadmin: result?.roleId === 1 ? 'yes' : 'no',
-          ...result,
-        });
-      } else {
-        console.log('Login is failed')
-      }
+      apiCall('POST', 'admin/login').then((result) => {
+        if (result.isValidated) {
+          props.router.push("/dashboard");
+          setItem("userdata", {
+            username: data.username,
+            isadmin: result?.roleId === 1 ? 'yes' : 'no',
+            ...result,
+          });
+        } else {
+          console.log('Login is failed')
+          setErrorMessage('Login is failed');
+
+        }
+      }).catch((err) => console.log('having err while login'))
+
     } else {
       console.log('Token is not generated')
     }
@@ -131,6 +137,8 @@ const Login = (props: any) => {
           </form>
         </div>
       </div>
+      {errorMessage && <Alert message={errorMessage} type="danger" />}
+
     </div>
   );
 };

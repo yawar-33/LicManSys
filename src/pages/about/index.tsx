@@ -1,5 +1,5 @@
 import { Card, PanelContent } from "@/components";
-import Table from "@/components/themes/table";
+import Table from "@/components/shared/table";
 import React from "react";
 
 const About = () => {

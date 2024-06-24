@@ -11126,8 +11126,8 @@ button.bg-dark:focus {
   .mx-xl-n1 {
     margin-left: -0.25rem !important;
   }
-P
-  .m-xl-n2 {
+
+  P .m-xl-n2 {
     margin: -0.5rem !important;
   }
 
@@ -23184,8 +23184,29 @@ body.text-sm .control-sidebar {
   line-height: calc(1.8125rem + 2px);
 }
 
+.custom-scroll{
+  max-height: calc(100vh - 200px); /* Adjust the height as needed */
+  overflow-y: auto;
+}
 label:not(.form-check-label):not(.custom-file-label) {
-  font-weight: 700;
+  font-weight: 400;
+  font-size: 13px !important;
+}
+
+ul.parsley-errors-list {
+  list-style: none;
+  color: #E74C3C;
+  padding-left: 0;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  margin-bottom: 1px !important;
+}
+
+input.parsley-error,
+textarea.parsley-error,
+select.parsley-error {
+  background: #FAEDEC;
+  border: 1px solid #E85445;
 }
 
 .warning-feedback {
@@ -56154,7 +56175,7 @@ a.text-muted:hover {
 
 
 
- .x_panel {
+.x_panel {
   position: relative;
   width: 100%;
   margin-bottom: 10px;

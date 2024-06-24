@@ -1,8 +1,19 @@
 import { Card, PanelContent } from "@/components";
-import Table from "@/components/themes/table";
+import AddNewCustomer from "@/components/shared/addnewcustomer";
+import Table from "@/components/shared/table";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Dashboard() {
+
+  const [openCustomer, setOpenCustomer] = useState(false);
+  const handleNewCustomer = () => {
+    setOpenCustomer(true)
+  }
+  const handleCloseCustomer = () => {
+    setOpenCustomer(false)
+
+  }
   return (
     <PanelContent headerContent title="Dashboard">
       <div className="row">
@@ -54,8 +65,37 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* <div className="x_panel">
+          <div className="x_content">
+            <button
+              type="button"
+              className="btn btn-primary"
+              data-toggle="modal"
+              data-target=".bs-example-modal-lg" onClick={handleNewCustomer}>
+              Add New Customer
+            </button>
 
-        <Table />
+            </div>
+          </div> */}
+          {openCustomer && <AddNewCustomer onClose={handleCloseCustomer} open={openCustomer} />}
+        <div className="x_panel">
+          <div className="x_title d-flex justify-content-between" style={{ marginBottom: "10px" }}>
+            <h4 style={{ margin: 0 }}>Customers</h4>
+            <button
+              type="button"
+              className="btn btn-primary"
+              data-toggle="modal"
+              data-target=".bs-example-modal-lg" onClick={handleNewCustomer}>
+              Add New Customer
+            </button>          </div>
+          <div className="x_content">
+
+
+            <Table />
+
+          </div>
+        </div>
+
       </div>
     </PanelContent>
   );
