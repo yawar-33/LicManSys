@@ -23184,10 +23184,12 @@ body.text-sm .control-sidebar {
   line-height: calc(1.8125rem + 2px);
 }
 
-.custom-scroll{
-  max-height: calc(100vh - 200px); /* Adjust the height as needed */
+.custom-scroll {
+  max-height: calc(100vh - 200px);
+  /* Adjust the height as needed */
   overflow-y: auto;
 }
+
 label:not(.form-check-label):not(.custom-file-label) {
   font-weight: 400;
   font-size: 13px !important;
@@ -34835,6 +34837,11 @@ html.maximized-card {
   color: #fff;
   background-color: #dc3545;
   border-color: #d32535;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1050;
+  width: 20%;
 }
 
 .alert-default-danger {
