@@ -56,8 +56,8 @@ const Header = (props: any) => {
                 className="dropdown-item"
                 onClick={() => {
                   props.router.push("/login");
-                  removeItem("userData");
-                  removeItem('tokenData');
+                  removeItem("userdata");
+                  removeItem("tokendata")
                 }}
               >
                 <i className="nav-icon fas fa-arrow-right-from-bracket"></i>{" "}

@@ -4,34 +4,30 @@ import {
   useRecoilValue,
   useSetRecoilState
 } from "recoil";
-import { Suspense, lazy, useEffect, useState, useCallback, startTransition } from "react";
-import { useRouter } from "next/router";
+
+const Footer = lazy(() => import("./footer"));
+const Header = lazy(() => import("./header"));
+const Sidebar = lazy(() => import("./sidebar"));
+
 import { themesSetting } from "@/recoil";
 import { screenSize, toggleSidebarMenu } from "../utils";
 import {
   LoadingApp,
   addWindowClass,
   calculateWindowSize,
+  getItem,
   removeWindowClass,
   useWindowSize
 } from "../utils/function";
-import { isUserValidated } from "../utils/authHelper";
+import { Suspense, lazy, useEffect, useState } from "react";
+import { withRouter } from "next/router";
 
-const Footer = lazy(() => import("./footer"));
-const Header = lazy(() => import("./header"));
-const Sidebar = lazy(() => import("./sidebar"));
-
-const Layout = ({ children }: any) => {
+const Layout = ({ children, router }: any) => {
   const theme = useRecoilValue(themesSetting);
   const screen = useRecoilValue(screenSize);
   const sidebar = useRecoilValue(toggleSidebarMenu);
   const setSizeValue = useSetRecoilState(screenSize);
   const [valueHideSidebar, setHideSidebar] = useRecoilState(toggleSidebarMenu);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  const windowSize = useWindowSize();
-  const setTheme = useSetRecoilState(themesSetting);
 
   const handleToggleMenuSidebar = () => {
     setHideSidebar({
@@ -39,45 +35,38 @@ const Layout = ({ children }: any) => {
     });
   };
 
-  useEffect(() => {
-    if (!isUserValidated()) {
-      router.replace("/login");
-    } else {
-      setLoading(false);
-    }
-  }, [router]);
+  const windowSize = useWindowSize();
+  const setTheme = useSetRecoilState(themesSetting);
+  const [loading, setloading] = useState(true);
 
   useEffect(() => {
+    if (getItem("userdata").isValidated === undefined) {
+      router.push("/login");
+    }
     removeWindowClass("sidebar-closed");
     removeWindowClass("sidebar-collapse");
     removeWindowClass("sidebar-open");
 
-    startTransition(() => {
-      const size = calculateWindowSize(windowSize.width);
-      if (screen.screenSize !== size) {
-        setSizeValue({ screenSize: size });
-      }
+    const size = calculateWindowSize(windowSize.width);
+    if (screen.screenSize !== size) {
+      setSizeValue({ screenSize: size });
+    }
 
-      if (sidebar.menuSidebarCollapsed && screen.screenSize === "lg") {
-        addWindowClass("sidebar-collapse");
-      } else if (sidebar.menuSidebarCollapsed && screen.screenSize === "xs") {
-        addWindowClass("sidebar-open");
-      } else if (!sidebar.menuSidebarCollapsed && screen.screenSize !== "lg") {
-        addWindowClass("sidebar-closed");
-        addWindowClass("sidebar-collapse");
-      }
+    if (sidebar.menuSidebarCollapsed && screen.screenSize === "lg") {
+      addWindowClass("sidebar-collapse");
+    } else if (sidebar.menuSidebarCollapsed && screen.screenSize === "xs") {
+      addWindowClass("sidebar-open");
+    } else if (!sidebar.menuSidebarCollapsed && screen.screenSize !== "lg") {
+      addWindowClass("sidebar-closed");
+      addWindowClass("sidebar-collapse");
+    }
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    });
-  }, [windowSize, sidebar.menuSidebarCollapsed, screen.screenSize, setSizeValue]);
+    setTimeout(() => {
+      setloading(false);
+    }, 1000);
+  }, [windowSize, sidebar, setTheme, screen.screenSize, setSizeValue, router]);
 
   RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
-
-  if (loading) {
-    return <LoadingApp />;
-  }
 
   return (
     <Suspense fallback={<LoadingApp />}>
@@ -94,8 +83,9 @@ const Layout = ({ children }: any) => {
           onKeyDown={() => {}}
         />
       </div>
+      {loading && <LoadingApp />}
     </Suspense>
   );
 };
 
-export default Layout;
+export default withRouter(Layout);

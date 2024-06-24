@@ -18,7 +18,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     config => {
         // Do something before the request is sent, e.g., add authentication tokens
-        const token = getItem("tokenData").token; // Get the token from localStorage
+        const token = getItem("tokendata").token; // Get the token from localStorage
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }

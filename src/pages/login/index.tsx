@@ -4,19 +4,23 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import { withRouter } from "next/router";
+import { getBasicAuthToken } from "@/components/utils/authHelper";
 import apiCall from "@/components/utils/apiservice";
-import { getBasicAuthToken, isUserValidated } from "@/components/utils/authHelper";
 
 const defaultValue = {
   username: "",
   password: "",
+  isadmin: ""
 };
 
 const Login = (props: any) => {
   const setTheme = useSetRecoilState(themesSetting);
   useEffect(() => {
-    if (isUserValidated()) props.router.push("/dashboard");
-
+    if (getItem("userdata").isValidated !== undefined) {
+      if (getItem("userdata").isValidated) {
+        props.router.push("/dashboard");
+      }
+    }
     setTheme({
       header: false,
       sidebar: false,
@@ -43,14 +47,17 @@ const Login = (props: any) => {
   const [password, setPassword] = useState(true);
 
   const onSubmit = async (data: any) => {
-    console.log('data ', data)
+
     const token = await getBasicAuthToken(data.username, data.password); // Generate the token
+
+    console.log('token generate ', token)
+
     if (token) {
       const result: any = await apiCall('POST', 'admin/login');
       console.log('result', result)
       if (result.isValidated) {
         props.router.push("/dashboard");
-        setItem("userData", {
+        setItem("userdata", {
           username: data.username,
           isadmin: result?.roleId === 1 ? 'yes' : 'no',
           ...result,
@@ -61,7 +68,22 @@ const Login = (props: any) => {
     } else {
       console.log('Token is not generated')
     }
-
+    // props.router.push("/dashboard");
+    // if (data.username === 'admin') {
+    //   setItem("userdata", {
+    //     userid: data.username,
+    //     username: data.username,
+    //     token: 12341212,
+    //     isadmin: 'yes'
+    //   });
+    // } else {
+    //   setItem("userdata", {
+    //     userid: data.username,
+    //     username: data.username,
+    //     token: 12341212,
+    //     isadmin: 'no'
+    //   });
+    // }
   };
 
   return (
