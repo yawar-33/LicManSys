@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { Menu } from "./menu";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface props {
   data?: Menu;
@@ -12,6 +13,9 @@ interface props {
   navheader?: any;
 }
 const SidebarNavList: React.FC<props> = (props) => {
+  const router = useRouter();
+  const currentRoute = router.asPath;
+  
   const icon = props.data?.icon && <i className={props.data.icon} />;
   const titlesub = props.data?.title && (
     <p>
@@ -50,16 +54,16 @@ const SidebarNavList: React.FC<props> = (props) => {
         {props.data?.children ? (
           <Link
             href={props.data?.path}
-            className="nav-link"
+            className="nav-link "
             onClick={handleMainMenuAction}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", }}
           >
             {icon} {titlesub}
           </Link>
         ) : props.data?.navheader !== true ? (
           <Link
             href={props.data?.path || ""}
-            className="nav-link"
+            className={`nav-link ${props.data?.path === currentRoute && `active`}`}
             onClick={handleMainMenuAction}
             style={{ cursor: "pointer" }}
           >
@@ -69,6 +73,7 @@ const SidebarNavList: React.FC<props> = (props) => {
             {icon} {title}
           </Link>
         ) : null}
+
 
         {props.data?.children && (
           <ul className="nav nav-treeview">

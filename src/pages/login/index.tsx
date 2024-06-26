@@ -56,7 +56,7 @@ const Login = (props: any) => {
     console.log('token generate ', token)
 
     if (token) {
-      apiCall('POST', 'admin/login').then((result) => {
+      apiCall('POST', 'admin/login', null).then((result) => {
         if (result.isValidated) {
           props.router.push("/dashboard");
           setItem("userdata", {

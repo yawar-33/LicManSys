@@ -1,7 +1,7 @@
 // services/api.js
 import axiosInstance from './axiosinstance';
 
-const apiCall = async (method: any, url: any, data = null, config = {}) => {
+const apiCall = async (method: any, url: any, data: any, config = {}) => {
     try {
         const response = await axiosInstance({
             method,
